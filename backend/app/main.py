@@ -99,7 +99,7 @@ async def redirect_short_url(
     if url.get("expires_at"):
         expires = datetime.fromisoformat(url["expires_at"].replace("Z", "+00:00"))
         if datetime.now(timezone.utc) > expires:
-            raise HTTPException(status_code=410, detail="This URL has expired")
+            raise HTTPException(status_code=410, detail="This URL has expired!!!")
 
     background_tasks.add_task(_track_click, url["id"], None, request)
     return RedirectResponse(url=url["original_url"], status_code=301)
