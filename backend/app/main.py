@@ -81,7 +81,7 @@ async def _track_click(url_id: str, qr_id: str | None, request: Request) -> None
         if qr_id:
             queries.increment_qr_scans(qr_id)
     except Exception:
-        pass  # Analytics must never crash a redirect
+        pass
 
 
 # ── Short URL redirect ────────────────────────────────────────────
