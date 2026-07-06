@@ -83,6 +83,35 @@ async def verify_payment(data: VerifyPaymentRequest, user=Depends(get_current_us
     return {"message": "Payment verified. Welcome to Pro!", "success": True}
 
 
+@router.post("/dev-upgrade", response_model=MessageResponse)
+async def dev_upgrade_to_pro(user=Depends(get_current_user)):
+    """
+    DEV-ONLY: instantly upgrade the current user to Pro, bypassing Razorpay.
+    Only enabled when RAZORPAY_KEY_ID starts with 'rzp_test_' so it can never
+    accidentally run in production.
+    """
+    if not settings.RAZORPAY_KEY_ID.startswith("rzp_test_"):
+        raise HTTPException(status_code=403, detail="Dev upgrade is disabled in production")
+
+    valid_until = datetime.now(timezone.utc) + timedelta(days=31)
+    queries.set_plan(user["id"], "pro")
+    queries.upsert_subscription(
+        user["id"],
+        {
+            "razorpay_order_id": None,
+            "razorpay_payment_id": f"dev_upgrade_{int(datetime.now(timezone.utc).timestamp())}",
+            "plan": "pro_monthly",
+            "billing_period": "monthly",
+            "status": "paid",
+            "amount": 0,
+            "currency": "INR",
+            "paid_at": datetime.now(timezone.utc).isoformat(),
+            "valid_until": valid_until.isoformat(),
+        },
+    )
+    return {"message": "Dev upgrade to Pro successful (no payment collected).", "success": True}
+
+
 @router.post("/webhook")
 async def razorpay_webhook(request: Request):
     """Authoritative payment confirmation from Razorpay."""
