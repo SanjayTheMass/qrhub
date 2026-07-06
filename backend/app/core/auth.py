@@ -22,5 +22,10 @@ async def get_current_user(
             raise HTTPException(status_code=401, detail="Invalid token payload")
         return {"id": user_id, "email": payload.get("email", "")}
     except JWTError as exc:
-        raise HTTPException(status_code=401, detail="Invalid or expired token") from exc
+        # Surface the real reason so wrong-secret / expired / bad-audience
+        # are trivially distinguishable in the browser + Render logs.
+        raise HTTPException(
+            status_code=401,
+            detail=f"JWT verification failed: {exc}",
+        ) from exc
 
