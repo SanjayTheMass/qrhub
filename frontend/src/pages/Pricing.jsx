@@ -10,6 +10,7 @@ const PRO_FEATURES  = ['Unlimited URLs', 'Unlimited QR codes', '1-year analytics
 export default function Pricing() {
   const [billing, setBilling] = useState('monthly')
   const { user } = useAuth()
+  const isTestMode = (import.meta.env.VITE_RAZORPAY_KEY_ID || '').startsWith('rzp_test_')
 
   return (
     <div className="min-h-screen bg-gray-50">
