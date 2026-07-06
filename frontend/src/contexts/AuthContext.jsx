@@ -40,7 +40,12 @@ export function AuthProvider({ children }) {
     supabase.auth.signUp({
       email,
       password,
-      options: { data: { full_name: fullName } },
+      options: {
+        data: { full_name: fullName },
+        // Redirect back to this deployment after email confirmation.
+        // Works for both http://localhost:5173/qrhub/ and https://<user>.github.io/qrhub/
+        emailRedirectTo: `${window.location.origin}${import.meta.env.BASE_URL}`,
+      },
     })
 
   const signOut = () => supabase.auth.signOut()
