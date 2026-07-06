@@ -29,11 +29,10 @@ api.interceptors.request.use(async (config) => {
   return config
 })
 
-// Handle 401 globally — refresh or redirect to login
+// Handle 401 globally — refresh once, retry the original request, else login
 api.interceptors.response.use(
   (res) => res,
   async (err) => {
-    // Log every failed request so it's visible in DevTools
     const cfg = err.config || {}
     const url = `${cfg.baseURL || ''}${cfg.url || ''}`
     // eslint-disable-next-line no-console
@@ -43,11 +42,20 @@ api.interceptors.response.use(
       err.response?.data || err.message
     )
 
-    if (err.response?.status === 401) {
-      const { data: { session } } = await supabase.auth.refreshSession()
-      if (!session) {
-        window.location.hash = '/login'
+    if (err.response?.status === 401 && !cfg._retry) {
+      cfg._retry = true
+      try {
+        const { data: { session } } = await supabase.auth.refreshSession()
+        if (session?.access_token) {
+          // Retry original request with the fresh token
+          cfg.headers = cfg.headers || {}
+          cfg.headers.Authorization = `Bearer ${session.access_token}`
+          return api.request(cfg)
+        }
+      } catch (_) {
+        // fall through to login redirect
       }
+      window.location.hash = '/login'
     }
     return Promise.reject(err)
   }
