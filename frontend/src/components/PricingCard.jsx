@@ -23,7 +23,7 @@ export default function PricingCard({ name, price, billing, features, cta, ctaLi
         order_id: data.order_id,
         name: 'QrHub',
         description: isTestMode
-          ? `TEST MODE — Use card 4111 1111 1111 1111 (any future expiry, CVV 123)`
+          ? `TEST MODE — Use UPI "success@razorpay" or card 5267 3181 8797 5449`
           : `Pro ${billing === 'monthly' ? 'Monthly ₹499' : 'Yearly ₹3999'}`,
         handler: async (response) => {
           try {
@@ -34,14 +34,47 @@ export default function PricingCard({ name, price, billing, features, cta, ctaLi
             toast.error('Payment verification failed. Please contact support.')
           }
         },
-        prefill: { email: user.email },
+        prefill: { email: user.email, contact: '' },
         theme: { color: '#4f46e5' },
         modal: { ondismiss: () => toast('Payment cancelled') },
       }
+
+      // In TEST mode force the UPI collect flow (typed UPI ID) — scanning the
+      // QR against your own test merchant always fails as "self-payment", and
+      // Razorpay's default may hide the collect input on desktop.
+      if (isTestMode) {
+        options.method = {
+          upi: true,
+          card: true,
+          netbanking: true,
+          wallet: false,
+          paylater: false,
+          emi: false,
+        }
+        options.config = {
+          display: {
+            blocks: {
+              banks: {
+                name: 'Pay via UPI ID (recommended for test mode)',
+                instruments: [{ method: 'upi', flows: ['collect'] }],
+              },
+              other: {
+                name: 'Other methods',
+                instruments: [
+                  { method: 'card' },
+                  { method: 'netbanking' },
+                ],
+              },
+            },
+            sequence: ['block.banks', 'block.other'],
+            preferences: { show_default_blocks: false },
+          },
+        }
+      }
+
       const rzp = new window.Razorpay(options)
 
-      // Show the real Razorpay reason on failure (e.g. "self-payment via UPI QR
-      // is not allowed in test mode").
+      // Show the real Razorpay reason on failure.
       rzp.on('payment.failed', (resp) => {
         const err = resp?.error || {}
         // eslint-disable-next-line no-console
@@ -49,16 +82,16 @@ export default function PricingCard({ name, price, billing, features, cta, ctaLi
         const reason = err.description || err.reason || 'Payment failed'
         toast.error(
           isTestMode
-            ? `${reason}. In TEST mode use card 4111 1111 1111 1111 or UPI ID "success@razorpay" (typed, not scanned).`
+            ? `${reason}. TEST cards: 5267 3181 8797 5449 (MC) or 4386 2894 0766 0153 (Visa). UPI: type "success@razorpay".`
             : reason,
-          { duration: 8000 }
+          { duration: 10000 }
         )
       })
 
       if (isTestMode) {
-        toast('Test mode: use card 4111 1111 1111 1111 or UPI "success@razorpay"', {
+        toast('Test: UPI ID "success@razorpay" (typed) or Indian test card', {
           icon: '🧪',
-          duration: 6000,
+          duration: 7000,
         })
       }
 

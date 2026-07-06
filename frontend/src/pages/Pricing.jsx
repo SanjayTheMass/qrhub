@@ -45,6 +45,30 @@ export default function Pricing() {
           </div>
         </div>
 
+        {isTestMode && (
+          <div className="max-w-3xl mx-auto mb-8 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
+            <p className="font-semibold mb-2">🧪 Razorpay Test Mode — no real money is charged</p>
+            <ul className="space-y-1 pl-4 list-disc">
+              <li>
+                <strong>UPI (recommended):</strong> choose UPI → click <em>Enter UPI ID</em> → type{' '}
+                <code className="bg-white/60 px-1.5 py-0.5 rounded">success@razorpay</code>
+              </li>
+              <li>
+                <strong>Card (Mastercard):</strong>{' '}
+                <code className="bg-white/60 px-1.5 py-0.5 rounded">5267 3181 8797 5449</code> · any future expiry · CVV{' '}
+                <code className="bg-white/60 px-1.5 py-0.5 rounded">123</code>
+              </li>
+              <li>
+                <strong>Card (Visa India):</strong>{' '}
+                <code className="bg-white/60 px-1.5 py-0.5 rounded">4386 2894 0766 0153</code>
+              </li>
+              <li>
+                <strong>Do NOT scan</strong> the UPI QR with your own UPI app — Razorpay blocks self-payment in test mode.
+              </li>
+            </ul>
+          </div>
+        )}
+
         <div className="grid md:grid-cols-2 gap-8 items-stretch">
           <PricingCard name="Free" price={0} billing={billing} features={FREE_FEATURES}
             cta="Get Started Free" ctaLink="/login?signup=1" plan={null} />
