@@ -11,15 +11,20 @@ export default function PricingCard({ name, price, billing, features, cta, ctaLi
   const handleUpgrade = async () => {
     if (!user) { navigate('/login'); return }
 
+    const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID || ''
+    const isTestMode  = razorpayKey.startsWith('rzp_test_')
+
     try {
       const { data } = await createOrder({ plan })
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        key: razorpayKey,
         amount: data.amount,
         currency: data.currency,
         order_id: data.order_id,
         name: 'QrHub',
-        description: `Pro ${billing === 'monthly' ? 'Monthly ₹499' : 'Yearly ₹3999'}`,
+        description: isTestMode
+          ? `TEST MODE — Use card 4111 1111 1111 1111 (any future expiry, CVV 123)`
+          : `Pro ${billing === 'monthly' ? 'Monthly ₹499' : 'Yearly ₹3999'}`,
         handler: async (response) => {
           try {
             await verifyPayment({ ...response, plan })
@@ -34,6 +39,29 @@ export default function PricingCard({ name, price, billing, features, cta, ctaLi
         modal: { ondismiss: () => toast('Payment cancelled') },
       }
       const rzp = new window.Razorpay(options)
+
+      // Show the real Razorpay reason on failure (e.g. "self-payment via UPI QR
+      // is not allowed in test mode").
+      rzp.on('payment.failed', (resp) => {
+        const err = resp?.error || {}
+        // eslint-disable-next-line no-console
+        console.error('[Razorpay payment.failed]', err)
+        const reason = err.description || err.reason || 'Payment failed'
+        toast.error(
+          isTestMode
+            ? `${reason}. In TEST mode use card 4111 1111 1111 1111 or UPI ID "success@razorpay" (typed, not scanned).`
+            : reason,
+          { duration: 8000 }
+        )
+      })
+
+      if (isTestMode) {
+        toast('Test mode: use card 4111 1111 1111 1111 or UPI "success@razorpay"', {
+          icon: '🧪',
+          duration: 6000,
+        })
+      }
+
       rzp.open()
     } catch (err) {
       toast.error(err.response?.data?.detail || 'Could not initiate payment. Try again.')
