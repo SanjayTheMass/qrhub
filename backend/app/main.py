@@ -1,5 +1,6 @@
 import hashlib
 from datetime import datetime, timezone
+from urllib.parse import urlparse
 
 from fastapi import BackgroundTasks, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,14 +19,31 @@ app = FastAPI(
 )
 
 # ── CORS ─────────────────────────────────────────────────────────
+# Browsers only compare scheme://host[:port] for CORS. If FRONTEND_URL
+# includes a path (e.g. https://user.github.io/qrhub), strip it so the
+# origin actually matches what the browser sends.
+def _origin_of(url: str) -> str:
+    try:
+        p = urlparse(url)
+        if p.scheme and p.netloc:
+            return f"{p.scheme}://{p.netloc}"
+    except Exception:
+        pass
+    return url
+
+_allowed_origins = {
+    settings.FRONTEND_URL,
+    _origin_of(settings.FRONTEND_URL),
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:5173",
+}
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        settings.FRONTEND_URL,
-        "http://localhost:5173",
-        "http://localhost:3000",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=sorted(_allowed_origins),
+    # Safety net: allow any GitHub Pages site (user.github.io / org.github.io)
+    allow_origin_regex=r"https://[a-zA-Z0-9-]+\.github\.io",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
