@@ -13,7 +13,10 @@ export default function Dashboard() {
   useEffect(() => {
     getDashboardSummary()
       .then(({ data }) => setSummary(data))
-      .catch(() => toast.error('Failed to load dashboard'))
+      .catch((err) => {
+        const detail = err.response?.data?.detail || err.message || 'unknown error'
+        toast.error(`Failed to load dashboard: ${detail}`)
+      })
       .finally(() => setLoading(false))
   }, [])
 
