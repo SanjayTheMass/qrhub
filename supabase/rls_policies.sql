@@ -1,5 +1,5 @@
 -- ============================================================
--- Rentabout RLS Policies — Run this SECOND in Supabase SQL Editor
+-- QrHub RLS Policies — Run this SECOND in Supabase SQL Editor
 -- ============================================================
 -- Note: The backend uses the SERVICE_ROLE key which bypasses RLS.
 -- These policies protect direct frontend/anon access only.
@@ -78,4 +78,3 @@ create policy "click_events: url owner select"
 create policy "subscriptions: owner select"
   on public.subscriptions for select
   using (auth.uid() = user_id);
-

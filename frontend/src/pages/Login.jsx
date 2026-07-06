@@ -41,7 +41,7 @@ export default function Login() {
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 to-purple-900 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
         <Link to="/" className="flex items-center gap-2 font-bold text-xl text-indigo-600 mb-8">
-          <QrCode className="w-7 h-7" /> Rentabout
+          <QrCode className="w-7 h-7" /> QrHub
         </Link>
 
         {/* Mode tabs */}

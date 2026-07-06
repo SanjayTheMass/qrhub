@@ -1,4 +1,4 @@
-# Integration Guide — Rentabout
+# Integration Guide — QrHub
 
 Complete step-by-step setup for Supabase, Render (backend) and GitHub Pages (frontend).
 
@@ -105,16 +105,16 @@ Test it:
 git init
 git add .
 git commit -m "Initial commit"
-git remote add origin https://github.com/YOUR_USERNAME/Rentabout.git
+git remote add origin https://github.com/YOUR_USERNAME/qrhub.git
 git push -u origin main
 ```
 
 ### 3b. Create Render service
 
 1. Go to [render.com](https://render.com) → **New** → **Web Service**
-2. Connect your GitHub account → select the **Rentabout** repo
+2. Connect your GitHub account → select the **qrhub** repo
 3. Settings:
-   - **Name:** `rentabout-api`
+   - **Name:** `qrhub-api`
    - **Root Directory:** `backend`
    - **Runtime:** `Docker`
    - **Dockerfile Path:** `./Dockerfile`
@@ -131,8 +131,8 @@ SUPABASE_JWT_SECRET       = your-jwt-secret
 RAZORPAY_KEY_ID           = rzp_test_xxx
 RAZORPAY_KEY_SECRET       = xxx
 RAZORPAY_WEBHOOK_SECRET   = xxx
-FRONTEND_URL              = https://YOUR_GITHUB_USERNAME.github.io/Rentabout
-BASE_URL                  = https://rentabout-api.onrender.com   ← your Render URL
+FRONTEND_URL              = https://YOUR_GITHUB_USERNAME.github.io/qrhub
+BASE_URL                  = https://qrhub-api.onrender.com   ← your Render URL
 ```
 
 ### 3d. Get the Deploy Hook URL
@@ -145,7 +145,7 @@ Add it as a GitHub secret: `RENDER_DEPLOY_HOOK_URL`
 Render free tier sleeps after 15 min of inactivity.
 
 1. Go to [cron-job.org](https://cron-job.org) (free)
-2. Create a cron job: `GET https://rentabout-api.onrender.com/health`
+2. Create a cron job: `GET https://qrhub-api.onrender.com/health`
 3. Schedule: every **14 minutes**
 
 ---
@@ -165,10 +165,10 @@ copy .env.example .env.local
 
 npm install
 npm run dev
-# App: http://localhost:5173/Rentabout/
+# App: http://localhost:5173/qrhub/
 ```
 
-> The `base: '/Rentabout/'` in `vite.config.js` **must match your GitHub repo name** exactly.
+> The `base: '/qrhub/'` in `vite.config.js` **must match your GitHub repo name** exactly.
 
 ---
 
@@ -182,7 +182,7 @@ In your GitHub repo → **Settings** → **Secrets and variables** → **Actions
 |-------------|-------|
 | `VITE_SUPABASE_URL` | `https://xxxx.supabase.co` |
 | `VITE_SUPABASE_ANON_KEY` | anon key from Supabase |
-| `VITE_API_BASE_URL` | `https://rentabout-api.onrender.com` |
+| `VITE_API_BASE_URL` | `https://qrhub-api.onrender.com` |
 | `VITE_RAZORPAY_KEY_ID` | `rzp_test_xxx` (use `rzp_live_xxx` in production) |
 | `RENDER_DEPLOY_HOOK_URL` | URL from Render step 3d |
 
@@ -202,7 +202,7 @@ git push origin main
 The `deploy-frontend.yml` workflow runs automatically on every push to `main` that touches `frontend/`.
 
 Your site will be live at:  
-`https://YOUR_GITHUB_USERNAME.github.io/Rentabout/`
+`https://YOUR_GITHUB_USERNAME.github.io/qrhub/`
 
 ---
 
@@ -217,7 +217,7 @@ Your site will be live at:
 ### 6b. Register the webhook
 
 1. Razorpay Dashboard → **Settings** → **Webhooks** → **Add New Webhook**
-2. **Webhook URL:** `https://rentabout-api.onrender.com/api/payments/webhook`
+2. **Webhook URL:** `https://qrhub-api.onrender.com/api/payments/webhook`
 3. **Secret:** choose a strong random string — save as `RAZORPAY_WEBHOOK_SECRET`
 4. **Active events:** check `payment.captured`
 5. Click **Save**
@@ -258,7 +258,7 @@ When ready for real payments:
 [ ] GET http://localhost:8000/health → {"status":"ok"}
 [ ] Swagger UI at http://localhost:8000/docs shows all routes
 [ ] frontend/.env.local has all 4 variables filled in
-[ ] npm run dev shows app at http://localhost:5173/Rentabout/
+[ ] npm run dev shows app at http://localhost:5173/qrhub/
 [ ] Sign up creates a profile row in Supabase → profiles table
 [ ] Create URL → short code appears, redirect works
 [ ] Create QR code → PNG appears in Supabase Storage bucket
@@ -280,7 +280,7 @@ When ready for real payments:
 | Redirect goes to 404 | `BASE_URL` wrong | Set `BASE_URL` to your Render service URL (not localhost) |
 | Razorpay webhook 400 | Wrong `RAZORPAY_WEBHOOK_SECRET` | Re-copy secret from Razorpay Dashboard → Webhooks |
 | Free tier Render sleep | Normal behaviour | Set up cron-job.org ping every 14 min |
-| GitHub Pages shows blank | Wrong `base` in vite.config.js | Ensure `base: '/Rentabout/'` matches repo name exactly (case-sensitive) |
+| GitHub Pages shows blank | Wrong `base` in vite.config.js | Ensure `base: '/qrhub/'` matches repo name exactly (case-sensitive) |
 | `profile not found` on first login | `handle_new_user` trigger not set | Re-run `supabase/schema.sql` — the trigger auto-creates profiles |
 
 ---
@@ -295,15 +295,14 @@ SUPABASE_JWT_SECRET=...
 RAZORPAY_KEY_ID=rzp_test_xxx
 RAZORPAY_KEY_SECRET=xxx
 RAZORPAY_WEBHOOK_SECRET=xxx
-FRONTEND_URL=https://YOUR_USERNAME.github.io/Rentabout
-BASE_URL=https://rentabout-api.onrender.com
+FRONTEND_URL=https://YOUR_USERNAME.github.io/qrhub
+BASE_URL=https://qrhub-api.onrender.com
 ```
 
 ### frontend/.env.local
 ```env
 VITE_SUPABASE_URL=https://xxxx.supabase.co
 VITE_SUPABASE_ANON_KEY=eyJ...
-VITE_API_BASE_URL=https://rentabout-api.onrender.com
+VITE_API_BASE_URL=https://qrhub-api.onrender.com
 VITE_RAZORPAY_KEY_ID=rzp_test_xxx
 ```
-

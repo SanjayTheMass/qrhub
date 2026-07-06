@@ -18,7 +18,7 @@ export default function PricingCard({ name, price, billing, features, cta, ctaLi
         amount: data.amount,
         currency: data.currency,
         order_id: data.order_id,
-        name: 'Rentabout',
+        name: 'QrHub',
         description: `Pro ${billing === 'monthly' ? 'Monthly ₹499' : 'Yearly ₹3999'}`,
         handler: async (response) => {
           try {

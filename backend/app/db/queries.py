@@ -1,5 +1,5 @@
 """
-All database operations for Rentabout.
+All database operations for QrHub.
 All queries use the service-role Supabase client (bypasses RLS).
 NEVER put raw DB calls in routers — always go through this module.
 """

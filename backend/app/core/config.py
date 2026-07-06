@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     RAZORPAY_KEY_SECRET: str
     RAZORPAY_WEBHOOK_SECRET: str
 
-    FRONTEND_URL: str = "https://yourusername.github.io/Rentabout"
+    FRONTEND_URL: str = "https://yourusername.github.io/qrhub"
     BASE_URL: str = "http://localhost:8000"
 
 

@@ -7,7 +7,7 @@ export default function Landing() {
       {/* Nav */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto border-b border-gray-100">
         <div className="flex items-center gap-2 font-bold text-xl text-indigo-600">
-          <QrCode className="w-7 h-7" /> Rentabout
+          <QrCode className="w-7 h-7" /> QrHub
         </div>
         <div className="flex items-center gap-3">
           <Link to="/pricing" className="text-sm text-gray-600 hover:text-gray-900">Pricing</Link>
@@ -97,11 +97,10 @@ export default function Landing() {
       {/* Footer */}
       <footer className="border-t border-gray-100 py-8 px-6 text-center text-sm text-gray-400">
         <div className="flex items-center justify-center gap-2 font-semibold text-gray-700 mb-2">
-          <QrCode className="w-5 h-5 text-indigo-600" /> Rentabout
+          <QrCode className="w-5 h-5 text-indigo-600" /> QrHub
         </div>
-        <p>© {new Date().getFullYear()} Rentabout · Built with ❤️ in India</p>
+        <p>© {new Date().getFullYear()} QrHub · Built with ❤️ in India</p>
       </footer>
     </div>
   )
 }
-

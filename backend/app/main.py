@@ -10,7 +10,7 @@ from app.db import queries
 from app.routers import analytics, auth, payments, qr, urls
 
 app = FastAPI(
-    title="Rentabout API",
+    title="QrHub API",
     description="Dynamic QR Code Generator & URL Shortener",
     version="1.0.0",
     docs_url="/docs",

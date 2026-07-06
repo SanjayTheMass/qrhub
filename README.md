@@ -1,4 +1,4 @@
-# Rentabout
+# QrHub
 
 A micro SaaS application for **Dynamic QR Code Generation** and **URL Shortening**, built with React + FastAPI + Supabase.
 

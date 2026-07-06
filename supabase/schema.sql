@@ -1,5 +1,5 @@
 -- ============================================================
--- Rentabout Schema — Run this FIRST in Supabase SQL Editor
+-- QrHub Schema — Run this FIRST in Supabase SQL Editor
 -- ============================================================
 
 -- Enable UUID extension

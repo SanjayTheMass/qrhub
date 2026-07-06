@@ -1,5 +1,5 @@
 -- ============================================================
--- Rentabout RPC Functions — Run this THIRD in Supabase SQL Editor
+-- QrHub RPC Functions — Run this THIRD in Supabase SQL Editor
 -- ============================================================
 
 -- Atomically increment URL click counter

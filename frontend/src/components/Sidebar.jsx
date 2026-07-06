@@ -18,7 +18,7 @@ export default function Sidebar() {
   return (
     <aside className="w-60 shrink-0 bg-white border-r border-gray-200 flex flex-col">
       <Link to="/" className="flex items-center gap-2 px-5 py-5 font-bold text-xl text-indigo-600 border-b border-gray-100">
-        <QrCode className="w-7 h-7" /> Rentabout
+        <QrCode className="w-7 h-7" /> QrHub
       </Link>
       <nav className="flex-1 px-3 py-4 space-y-1">
         {NAV.map(({ to, label, icon: Icon }) => {

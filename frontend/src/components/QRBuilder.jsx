@@ -18,7 +18,7 @@ export default function QRBuilder({ onSubmit, onClose }) {
     logo_url: '',
   })
 
-  const previewURL = urls.find((u) => u.id === form.url_id)?.short_url || 'https://rentabout.app'
+  const previewURL = urls.find((u) => u.id === form.url_id)?.short_url || 'https://qrhub.app'
 
   useEffect(() => {
     listURLs(1, 100).then(({ data }) => {

@@ -16,7 +16,7 @@ export default function Pricing() {
       <nav className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 font-bold text-xl text-indigo-600">
-            <QrCode className="w-7 h-7" /> Rentabout
+            <QrCode className="w-7 h-7" /> QrHub
           </Link>
           {user ? (
             <Link to="/dashboard" className="btn-primary text-sm">Dashboard</Link>

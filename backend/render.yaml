@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: rentabout-api
+    name: qrhub-api
     runtime: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend

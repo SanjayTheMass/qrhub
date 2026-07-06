@@ -11,13 +11,13 @@ PLANS: dict[str, dict] = {
     "pro_monthly": {
         "amount": 49900,          # ₹499 in paise
         "currency": "INR",
-        "description": "Rentabout Pro — Monthly",
+        "description": "QrHub Pro — Monthly",
         "billing_period": "monthly",
     },
     "pro_yearly": {
         "amount": 399900,         # ₹3999 in paise
         "currency": "INR",
-        "description": "Rentabout Pro — Yearly",
+        "description": "QrHub Pro — Yearly",
         "billing_period": "yearly",
     },
 }
